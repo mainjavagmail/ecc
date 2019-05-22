@@ -2,6 +2,7 @@ package com.sensedia.ecc.test;
 
 import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
 
 import com.sensedia.ecc.util.ECCUtil;
 import com.sensedia.ecc.util.KeyUtil;
@@ -19,20 +20,26 @@ public class WhsCrypto {
 		byte[] pubKey = Crypto.getPublicKey(secretPhrase);
 		byte[] priKey = Crypto.getPrivateKey(secretPhrase);
 		*/
-		KeyPair kp = KeyUtil.genKeyPair();
-		byte[] pubKey = KeyUtil.toByte(kp.getPublic());
-		System.out.println("pubKey: "+ECCUtil.byteToStringHex(pubKey));
-		byte[] priKey = KeyUtil.toByte(kp.getPrivate());
-		System.out.println("priKey: "+ECCUtil.byteToStringHex(priKey));
-		String message = "original message";
-		byte[] messEncrypt = Crypto.aesEncrypt(message.getBytes(), priKey, pubKey);
-		System.out.println("messEncrypt: "+ECCUtil.byteToStringHex(messEncrypt));
-		byte[] messDecrypt = Crypto.aesDecrypt(messEncrypt, priKey, pubKey);
+		KeyPair kp;
 		try {
-			System.out.println("messDecrypt: "+new String(messDecrypt,"UTF-8"));
-		} catch (UnsupportedEncodingException e) {
+			kp = KeyUtil.genKeyPair();
+			byte[] pubKey = KeyUtil.toByte(kp.getPublic());
+			System.out.println("pubKey: "+ECCUtil.byteToStringHex(pubKey));
+			byte[] priKey = KeyUtil.toByte(kp.getPrivate());
+			System.out.println("priKey: "+ECCUtil.byteToStringHex(priKey));
+			String message = "original message";
+			byte[] messEncrypt = Crypto.aesEncrypt(message.getBytes(), priKey, pubKey);
+			System.out.println("messEncrypt: "+ECCUtil.byteToStringHex(messEncrypt));
+			byte[] messDecrypt = Crypto.aesDecrypt(messEncrypt, priKey, pubKey);
+			try {
+				System.out.println("messDecrypt: "+new String(messDecrypt,"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (NoSuchAlgorithmException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 	}
 	

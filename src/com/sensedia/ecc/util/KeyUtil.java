@@ -73,12 +73,13 @@ public class KeyUtil {
 		return ret;
 	}
 	
-	public static KeyPair genKeyPair() {
+	public static KeyPair genKeyPair() throws NoSuchAlgorithmException {
 		KeyPair ret = null;
 		try {
 			ret = genKeyPair(SecureRandom.getInstance("SHA1PRNG"));
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
+			throw e;
 		}
 		return ret;
 	}
