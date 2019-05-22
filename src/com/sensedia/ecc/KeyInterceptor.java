@@ -2,6 +2,8 @@ package com.sensedia.ecc;
 
 import java.security.KeyPair;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sensedia.ecc.util.ECCUtil;
 import com.sensedia.ecc.util.KeyUtil;
 import com.sensedia.interceptor.externaljar.annotation.ApiSuiteInterceptor;
@@ -22,8 +24,18 @@ public class KeyInterceptor {
 		call.tracer.trace("priKey: "+ECCUtil.byteToStringHex(priKey));
 		
 		// Retorno
-		call.request.setHeader("pubKey", ECCUtil.byteToStringHex(pubKey));
-		call.response.setHeader("pubKey", ECCUtil.byteToStringHex(pubKey));
-		// TODO - Verificar se deve armazenar no HEADER ou responder no Body
+		//call.request.setHeader("pubKey", ECCUtil.byteToStringHex(pubKey));
+		//call.response.setHeader("pubKey", ECCUtil.byteToStringHex(pubKey));
+		
+		JsonObject jsonObject = new JsonParser().parse("{\"publicKey\":\"\",\"privateKey\":\"\"}").getAsJsonObject();
+		
+		jsonObject.addProperty("publicKey", ECCUtil.byteToStringHex(pubKey));
+		jsonObject.addProperty("privateKey", ECCUtil.byteToStringHex(priKey));
+		
+		if( call.response == null ) {
+			call.request.getBody().setBytes(jsonObject.toString().getBytes());
+		}else {
+			call.response.getBody().setBytes(jsonObject.toString().getBytes());
+		}
 	}
 }
