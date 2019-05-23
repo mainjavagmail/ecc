@@ -2,10 +2,15 @@ package com.sensedia.ecc.util;
 
 import java.security.Key;
 import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Security;
+
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 
 import com.sensedia.ecc.curve.Curve25519KeyPairGenerator;
 
@@ -65,8 +70,8 @@ public class KeyUtil {
 	public static KeyPair genKeyPair(SecureRandom secureRandom) {
 		KeyPair ret = null;
 		try {
-			SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
-			ret = Curve25519KeyPairGenerator.generateKeyPair(random);
+			//SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+			ret = Curve25519KeyPairGenerator.generateKeyPair(secureRandom);
 		}catch( Exception e ) {
 			
 		}
@@ -93,4 +98,12 @@ public class KeyUtil {
 		String s = new String(pubKeyByte);
 		System.out.println(s);
 	}
+	
+	public static KeyPair getKeyPair() throws Exception {
+		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
+        ECNamedCurveParameterSpec curveParameterSpec = ECNamedCurveTable.getParameterSpec("secp384r1");
+        keyPairGenerator.initialize(curveParameterSpec, new SecureRandom());
+        return keyPairGenerator.generateKeyPair();
+    }
 }
