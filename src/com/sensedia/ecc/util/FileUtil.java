@@ -122,7 +122,8 @@ public class FileUtil {
 	public static boolean string2File(String filePath, String content, boolean append, Charset charset) {
 		File file = new File(filePath);
 		File parent = file.getParentFile();
-		mkdirByFile(parent.getAbsolutePath());
+		if( parent != null )
+			mkdirByFile(parent.getAbsolutePath());
 		OutputStreamWriter out = null;
 		try {
 			out = new OutputStreamWriter(new FileOutputStream(file, append), charset);
