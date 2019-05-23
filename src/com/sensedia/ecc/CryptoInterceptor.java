@@ -54,10 +54,14 @@ public class CryptoInterceptor {
 		JsonElement personalID = jsonObject.get("personalID");
 		
 		
-		byte[] fullNameByte = Crypto.aesDecrypt(fullName.getAsString().getBytes(), priKeyByte, pubKeyByte);
-		byte[] birthDateByte = Crypto.aesDecrypt(birthDate.getAsString().getBytes(), priKeyByte, pubKeyByte);
-		byte[] phoneByte = Crypto.aesDecrypt(phone.getAsString().getBytes(), priKeyByte, pubKeyByte);
-		byte[] personalIDByte = Crypto.aesDecrypt(personalID.getAsString().getBytes(), priKeyByte, pubKeyByte);
+//		byte[] fullNameByte = Crypto.aesDecrypt(fullName.getAsString().getBytes(), priKeyByte, pubKeyByte);
+//		byte[] birthDateByte = Crypto.aesDecrypt(birthDate.getAsString().getBytes(), priKeyByte, pubKeyByte);
+//		byte[] phoneByte = Crypto.aesDecrypt(phone.getAsString().getBytes(), priKeyByte, pubKeyByte);
+//		byte[] personalIDByte = Crypto.aesDecrypt(personalID.getAsString().getBytes(), priKeyByte, pubKeyByte);
+		byte[] fullNameByte = Crypto.aesDecrypt(ECCUtil.hexStringToByteArray(fullName.getAsString()), priKeyByte, pubKeyByte);
+		byte[] birthDateByte = Crypto.aesDecrypt(ECCUtil.hexStringToByteArray(birthDate.getAsString()), priKeyByte, pubKeyByte);
+		byte[] phoneByte = Crypto.aesDecrypt(ECCUtil.hexStringToByteArray(phone.getAsString()), priKeyByte, pubKeyByte);
+		byte[] personalIDByte = Crypto.aesDecrypt(ECCUtil.hexStringToByteArray(personalID.getAsString()), priKeyByte, pubKeyByte);
 		
 		String fullNameStr = new String(fullNameByte);
 		String birthDateStr = new String(birthDateByte);
